@@ -7,9 +7,11 @@ libicq_core_la_LIBADD=$(top_srcdir)/src/protocols/oscar/liboscar.a $(top_srcdir)
 
 INCLUDES = \
 	-I $(top_srcdir)/src/gaimglue \
+	-I $(top_srcdir)/src/protocols/oscar/ \
 	$(GLIB_CFLAGS) \
 	-I$(IRSSI_INCLUDE) -I$(IRSSI_INCLUDE)/src \
 	-I$(IRSSI_INCLUDE)/src/core 
+
 
 libicq_core_la_SOURCES = \
 	icq-commands.c \
