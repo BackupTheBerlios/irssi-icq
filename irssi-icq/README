@@ -1,0 +1,63 @@
+compile:
+
+ ./autogen.sh --with-irssi=~/src/irssi-0.8.5.CVS
+ make
+ make user_install
+
+load in irssi:
+
+ /LOAD icq
+ /SERVER -icqnet icq login.icq.com 5190 your_pass your_uin
+
+If that works you can put that things in your config file.
+Add to chatnets section:
+
+ icqnet = { type = "ICQ"; nick = "your_uin"; };
+
+and this to servers section
+
+ { address = "login.icq.com"; chatnet = "icqnet"; port = "5190"; password = "your_pass"; }
+
+Now you should be able to connect by simply writing
+
+ /LOAD icq
+ /CONNECT icqnet
+
+and to load your buddies add this to settings section:
+
+ "icq/core" = { buddy_file = "~/.micqrc"; };
+
+Substitute ~/.micqrc with the path to your buddy file.
+This plugin can read any file and looks for lines with an uin in the
+first column and the nickname in the second column. The file is
+loaded only once when the module is loaded.
+
+Commands:
+~~~~~~~~~
+/AWAY {na|away|ffc|occ|dnd}
+	set your status to Not Available/Away/Free For Chat/Occupied/Do Not Disturb
+/AWAY
+	set your status to Online
+/ADDBUDDY uin nick
+	add one buddy to your buddy list. It is not saved in any file.
+/MSG {nick|uin} message
+	send message to a person
+/QUERY {nick|uin}
+	start a query with a person
+/WHOIS
+	display info about all your contacts
+/WHOIS {na|away|ffc|occ|dnd|online|offline}
+	display info about your contacts in the specific group
+/WHOIS {nick|uin}
+	display very sparse information about a contact
+
+Future:
+~~~~~~~
+Because of the ugliness of AIM Oscar protocol I will not continue on this work.
+If you want to take over development you are more than welcome to.
+Among things left to do is:
+ * Retrival of offline messages
+ * Autoresponding away message
+ * Clean up code :)
+
+Chistian Häggström, 4 June 2002, Email me: chm@c00.info

@@ -1,0 +1,2 @@
+* Handle a message format that is sent by some mac clients, the messages was
+  silently dropped before.
