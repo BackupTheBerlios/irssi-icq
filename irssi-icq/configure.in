@@ -46,8 +46,76 @@ if test "x$ac_cv_prog_gcc" = "xyes"; then
   CFLAGS="$CFLAGS -Wall"
 fi
 
+dnl 
+dnl AC_ARG_ENABLE(multi,   [  --disable-multi         disable multiple connections],,enable_multi=yes)
+dnl AC_ARG_ENABLE(prpls,   [  --disable-prpls         don't build dynamic protocol plugins],,enable_prpls=yes)
+dnl AC_ARG_WITH(static-prpls,    [  --with-static-prpls     link in certain protocols statically],[STATIC_PRPLS=`echo $withval | $sedpath 's/,/ /g'`],STATIC_PRPLS="")
+dnl if test "x$STATIC_PRPLS" = "xall" ; then
+dnl 	STATIC_PRPLS="gg irc jabber msn napster oscar toc yahoo zephyr"
+dnl fi
+dnl AC_SUBST(STATIC_PRPLS)
+dnl STATIC_LINK_LIBS=
+dnl extern_init=
+dnl load_proto=
+dnl for i in $STATIC_PRPLS ; do
+dnl 	STATIC_LINK_LIBS="$STATIC_LINK_LIBS protocols/$i/lib$i.a"
+dnl 	extern_init="$extern_init extern gboolean gaim_init_${i}_plugin();"
+dnl 	load_proto="$load_proto gaim_init_${i}_plugin();"
+dnl 	case $i in
+dnl 		gg) static_gg=yes ;;
+dnl 		irc) static_irc=yes ;;
+dnl 		jabber) static_jabber=yes ;;
+dnl 		msn) static_msn=yes ;;
+dnl 		napster) static_napster=yes ;;
+dnl 		oscar) static_oscar=yes ;;
+dnl 		toc) static_toc=yes ;;
+dnl 		trepia) static_trepia=yes ;;
+dnl 		yahoo) static_yahoo=yes ;;
+dnl 		zephyr) static_zephyr=yes ;;
+dnl 		*) echo "Invalid static protocol $i!!" ; exit ;;
+dnl 	esac
+dnl done
+dnl 
+dnl 
+dnl AM_CONDITIONAL(STATIC_GG, test "x$static_gg" = "xyes")
+dnl AM_CONDITIONAL(STATIC_IRC, test "x$static_irc" = "xyes")
+dnl AM_CONDITIONAL(STATIC_JABBER, test "x$static_jabber" = "xyes")
+dnl AM_CONDITIONAL(STATIC_MSN, test "x$static_msn" = "xyes")
+dnl AM_CONDITIONAL(STATIC_NAPSTER, test "x$static_napster" = "xyes")
+dnl AM_CONDITIONAL(STATIC_OSCAR, test "x$static_oscar" = "xyes")
+dnl AM_CONDITIONAL(STATIC_TOC, test "x$static_toc" = "xyes")
+dnl AM_CONDITIONAL(STATIC_TREPIA, test "x$static_trepia" = "xyes")
+dnl AM_CONDITIONAL(STATIC_YAHOO, test "x$static_yahoo" = "xyes")
+dnl AM_CONDITIONAL(STATIC_ZEPHYR, test "x$static_zephyr" = "xyes")
+dnl AC_SUBST(STATIC_LINK_LIBS)
+dnl 
+dnl AC_SUBST(KRB4_CFLAGS)
+dnl AC_SUBST(KRB4_LDFLAGS)
+dnl AC_SUBST(KRB4_LIBS)
+dnl 
+dnl protocolls static so far. we do just use oscar. more to come.
+dnl PRPLS=0;
+dnl STATIC_PRPLS=oscar;
+dnl AC_SUBST(PRPLS)
+dnl AC_SUBST(STATIC_PRPLS)
+
+
 AC_OUTPUT(
 Makefile
 src/Makefile
 src/core/Makefile
-src/fe-common/Makefile)
+src/fe-common/Makefile
+src/protocols/Makefile
+src/protocols/oscar/Makefile)
+
+
+dnl src/protocols/gg/Makefile
+dnl src/protocols/irc/Makefile
+dnl src/protocols/jabber/Makefile
+dnl src/protocols/msn/Makefile
+dnl src/protocols/napster/Makefile
+dnl 
+dnl src/protocols/toc/Makefile
+dnl src/protocols/yahoo/Makefile
+dnl src/protocols/zephyr/Makefile
+dnl 

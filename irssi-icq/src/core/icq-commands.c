@@ -48,7 +48,7 @@ static void cmd_away(const char *status, ICQ_SERVER_REC * sock)
 	int code = -1;
 
 	CMD_ICQ_SERVER(sock);
-
+	printtext(sock, NULL,  MSGLEVEL_CLIENTNOTICE,"blabla");
 	if (status && *status) {
 		code = parse_away_mode(status);
 		if (code == -1) {
@@ -67,7 +67,8 @@ void icq_commands_init(void)
 {
 	command_bind_icq("addbuddy", NULL, (SIGNAL_FUNC) cmd_addbuddy);
 	//command_bind_icq("away", NULL, (SIGNAL_FUNC) cmd_away);
-	signal_add("away", (SIGNAL_FUNC) cmd_away);
+	signal_add("away mode changed", (SIGNAL_FUNC) cmd_away);
+	// "awaylog show", LOG_REC, int away_msgs, int filepos -> do we need that too?
 	//    command_bind_icq("save", NULL, (SIGNAL_FUNC) icq_save_buddy_file);
 	signal_add("setup saved", (SIGNAL_FUNC)icq_save_buddy_file);
 	signal_add("setup reread",(SIGNAL_FUNC)icq_reread_buddy_file);
@@ -83,5 +84,5 @@ void icq_commands_deinit(void)
   /*    command_unbind("connect", (SIGNAL_FUNC) icq_check_buddies);*/
   command_unbind("addbuddy", (SIGNAL_FUNC) cmd_addbuddy);
   //command_unbind("away", (SIGNAL_FUNC) cmd_away);
-  signal_remove("away", (SIGNAL_FUNC) cmd_away);
+  signal_remove("away mode changed", (SIGNAL_FUNC) cmd_away);
 }

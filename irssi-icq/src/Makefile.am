@@ -1,1 +1,1 @@
-SUBDIRS = core fe-common
+SUBDIRS =  protocols core fe-common
