@@ -3,13 +3,13 @@ moduledir = $(libdir)/irssi/modules
 module_LTLIBRARIES = libicq_core.la
 libicq_core_la_LDFLAGS = -avoid-version
 
-libicq_core_la_LIBADD=$(top_srcdir)/src/protocols/oscar/liboscar.a
+libicq_core_la_LIBADD=$(top_srcdir)/src/protocols/oscar/liboscar.a $(top_srcdir)/src/gaimglue/libgaimglue.a
 
 INCLUDES = \
+	-I $(top_srcdir)/src/gaimglue \
 	$(GLIB_CFLAGS) \
 	-I$(IRSSI_INCLUDE) -I$(IRSSI_INCLUDE)/src \
-	-I$(IRSSI_INCLUDE)/src/core \
-	-I $(top_srcdir)/src/protocols/oscar
+	-I$(IRSSI_INCLUDE)/src/core 
 
 libicq_core_la_SOURCES = \
 	icq-commands.c \
@@ -19,7 +19,7 @@ libicq_core_la_SOURCES = \
 	icq-protocol.c \
 	icq-servers.c \
 	icq-buddy.c \
-	icq-session.c
+	icq-session.c 
 
 noinst_HEADERS = \
 	icq.h \

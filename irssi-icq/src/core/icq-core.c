@@ -32,6 +32,11 @@
 
 #include "settings.h"
 
+// GAIM STUFF
+#include "oscar.h"
+
+
+
 void icq_session_init(void);
 void icq_session_deinit(void);
 
@@ -40,39 +45,50 @@ void icq_servers_reconnect_deinit(void);
 
 static CHATNET_REC *create_chatnet(void)
 {
-	return g_new0(CHATNET_REC, 1);
+  GAIM_CHATNET_REC* net=g_new0(GAIM_CHATNET_REC, 1);
+  gaim_init_oscar_plugin(&net->prpl_info, &net->info);
+  return (CHATNET_REC*) net;
 }
 
 static SERVER_SETUP_REC *create_server_setup(void)
 {
+  /// -> stuff from init_plugin needs to be called here.
+  /// -> needs to virtualized, just one setup at once so far.
 	return g_new0(SERVER_SETUP_REC, 1);
 }
 
 static SERVER_CONNECT_REC *create_server_connect(void)
 {
+  /// -> how does gaim build server connects?
+ 
 	return g_new0(SERVER_CONNECT_REC, 1);
 }
 
 static void destroy_server_connect(SERVER_CONNECT_REC * conn)
 {
+  /// -> disconnect?
+  g_free(conn);/// is this allright?
 }
 
 void icq_core_init(void)
 {
 	CHAT_PROTOCOL_REC *rec;
+	GaimPluginProtocolInfo *prpl_info;
+	GaimPluginInfo *info;
 
+	gaim_init_oscar_plugin(&prpl_info, &info);
 	settings_add_str("misc", "buddy_file", "~/.irssi/icq_config");
-
 	rec = g_new0(CHAT_PROTOCOL_REC, 1);
-	rec->name = "ICQ";
-	rec->fullname = "I Seek You";
-	rec->chatnet = "icqnet";
+	rec->create_chatnet = create_chatnet;
+	rec->name = info->description;
+	rec->fullname = info->name;
+	rec->chatnet = info->id;
 
 	rec->case_insensitive = TRUE;
 
-	rec->create_chatnet = create_chatnet;
 	rec->create_server_setup = create_server_setup;
 	/* this NULL here causes segfault with /CHANNEL commands */
+	/// use this channel to display icq-buddielist?
 	rec->create_channel_setup = NULL;
 	rec->create_server_connect = create_server_connect;
 	rec->destroy_server_connect = destroy_server_connect;
@@ -89,6 +105,7 @@ void icq_core_init(void)
 
 	read_buddy_file();
 
+	/// is this the right place to initialize connections?
 	icq_servers_init();
 	icq_servers_reconnect_init();
 	icq_protocol_init();
@@ -97,6 +114,8 @@ void icq_core_init(void)
 	icq_session_init();
 
 	module_register("icq", "core");
+
+
 }
 
 void icq_core_deinit(void)

@@ -33,9 +33,9 @@
 
 #include "internal.h"
 
-#include "account.h"
+//#include "account.h"
 #include "accountopt.h"
-#include "buddyicon.h"
+//#include "buddyicon.h"
 #include "conversation.h"
 #include "debug.h"
 #include "ft.h"
@@ -53,7 +53,7 @@
 #include "md5.h"
 
 /* XXX CORE/UI */
-#include "gtkinternal.h"
+//#include "gtkinternal.h"
 ///#include "gaim.h"
 
 
@@ -6572,8 +6572,7 @@ static GaimPluginInfo info =
 	"AIM/ICQ",                                        /**< name           */
 	VERSION,                                          /**< version        */
 	                                                  /**  summary        */
-	N_("AIM/ICQ Protocol Plugin"),
-	                                                  /**  description    */
+	N_("AIM/ICQ Protocol Plugin"),                    /**  description    */
 	N_("AIM/ICQ Protocol Plugin"),
 	NULL,                                             /**< author         */
 	GAIM_WEBSITE,                                     /**< homepage       */
@@ -6586,6 +6585,8 @@ static GaimPluginInfo info =
 	&prpl_info                                        /**< extra_info     */
 };
 
+
+/*
 static void
 init_plugin(GaimPlugin *plugin)
 {
@@ -6602,5 +6603,20 @@ init_plugin(GaimPlugin *plugin)
 
 /// -> irssify	my_protocol = plugin;
 }
+*/
+//GAIM_INIT_PLUGIN(oscar, init_plugin, info);
+void gaim_init_oscar_plugin(GaimPluginProtocolInfo **pprpl_info, GaimPluginInfo **pinfo) 
+{ 
 
-GAIM_INIT_PLUGIN(oscar, init_plugin, info);
+  /*
+  GaimPlugin *plugin = gaim_plugin_new(TRUE, NULL); 
+  plugin->info = &(info); 
+  initfunc(init_plugin); 
+  return gaim_plugin_register(init_plugin); 
+  */
+  *pprpl_info= &prpl_info;
+  *pinfo=&info;
+}
+
+
+

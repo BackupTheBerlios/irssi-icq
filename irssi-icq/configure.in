@@ -104,6 +104,7 @@ AC_OUTPUT(
 Makefile
 src/Makefile
 src/core/Makefile
+src/gaimglue/Makefile
 src/fe-common/Makefile
 src/protocols/Makefile
 src/protocols/oscar/Makefile)

@@ -6,6 +6,13 @@ EXTRA_DIST = \
 		AUTHORS \
 		Makefile.mingw
 
+INCLUDES = \
+	$(GLIB_CFLAGS) \
+	-I$(IRSSI_INCLUDE) -I$(IRSSI_INCLUDE)/src \
+	-I$(IRSSI_INCLUDE)/src/core \
+	-I $(top_srcdir)/src/core \
+	-I $(top_srcdir)/src/gaimglue
+
 pkgdir = $(libdir)/gaim
 
 OSCARSOURCES = \
@@ -68,10 +75,6 @@ liboscar_a_CFLAGS  = $(AM_CFLAGS)
 #dnl do it static.
 
 
-AM_CPPFLAGS = \
-	-I$(top_srcdir)/src \
-	$(GLIB_CFLAGS) \
-	$(DEBUG_CFLAGS)
 
 
 #dnl 	$(GTK_CFLAGS) 

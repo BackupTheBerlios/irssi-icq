@@ -1,1 +1,1 @@
-SUBDIRS =  protocols core fe-common
+SUBDIRS =  gaimglue protocols core fe-common

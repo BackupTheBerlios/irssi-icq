@@ -63,6 +63,13 @@ static void cmd_away(const char *status, ICQ_SERVER_REC * sock)
 	icq_send_setstatus(sock, code);
 }
 
+static void cmd_version(const char *data, ICQ_SERVER_REC *sock)
+{
+  //  GaimPluginInfo* info=ICQ_SERVER_REC;
+
+
+}
+
 void icq_commands_init(void)
 {
 	command_bind_icq("addbuddy", NULL, (SIGNAL_FUNC) cmd_addbuddy);

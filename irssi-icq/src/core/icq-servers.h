@@ -3,6 +3,8 @@
 
 #include "chat-protocols.h"
 #include "servers.h"
+#include "plugin.h"
+#include "prpl.h"
 
 #define SOCK_BUFSIZE 2024
 
@@ -39,5 +41,18 @@ char *icq_server_get_channels(ICQ_SERVER_REC * server);
 
 void icq_servers_init(void);
 void icq_servers_deinit(void);
+
+
+
+typedef struct _GAIM_CHATNET_REC GAIM_CHATNET_REC;
+
+struct _GAIM_CHATNET_REC {
+#include "chatnet-rec.h"
+  GaimPluginProtocolInfo *prpl_info;
+  GaimPluginInfo *info;
+};
+
+
+
 
 #endif
