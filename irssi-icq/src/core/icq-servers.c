@@ -75,7 +75,7 @@ static void sig_server_disconnected(ICQ_SERVER_REC * server)
 	}
 }
 
-static int isnickflag_func(char flag)
+static int isnickflag_func(SERVER_REC *server, char flag)
 {
 	return FALSE;
 }
@@ -85,7 +85,7 @@ static int ischannel_func(SERVER_REC * server, const char *data)
 	return FALSE;
 }
 
-static const char *get_nick_flags(void)
+static const char *get_nick_flags(SERVER_REC *server)
 {
 	return "";
 }
