@@ -6,7 +6,7 @@
 #include "icq-buddy.h"
 #include "settings.h"
 #include "misc.h"
-
+#include "core/queries.h"
 struct buddy {
 	char *uin;
 	char *alias;
@@ -18,10 +18,22 @@ GSList *buddies = NULL;
 
 void add_buddy(const char *uin, const char *alias)
 {
-	struct buddy *new = g_new(struct buddy, 1);
-	new->uin = strdup(uin);
-	new->alias = strdup(alias);
-	buddies = g_slist_prepend(buddies, new);
+  QUERY_REC *query;
+  struct buddy *new = g_new(struct buddy, 1);
+  new->uin = strdup(uin);
+  new->alias = strdup(alias);
+  buddies = g_slist_prepend(buddies, new);
+  
+  query=query_find(NULL,uin);
+  if (query)
+	{
+	  g_free(query->visible_name);
+
+	  query->visible_name=g_strdup(alias);
+	  query->name=g_strdup(alias);
+	  signal_emit("query nick changed", 2, query, uin);
+	  signal_emit("window item name changed", 1, query);
+	}
 }
 
 void destroy_buddy_list(void)
@@ -37,7 +49,7 @@ static int compare_uin(struct buddy *try, const char *uin)
 }
 static int compare_alias(struct buddy *try, const char *alias)
 {
-	return strcmp(alias, try->alias);
+	return strcasecmp(alias, try->alias);
 }
 
 static struct buddy *get_buddy(const char *uin)
@@ -116,6 +128,12 @@ static void trim(char *src)
 	}
 	*dst = '\0';
 }
+/*
+  void icq_flushbuddy(const char *uin)
+  {
+  
+  }
+*/
 
 void read_buddy_file(void)
 {
@@ -141,6 +159,39 @@ void read_buddy_file(void)
 	}
 	fclose(stream);
 	printtext(NULL, NULL, MSGLEVEL_CLIENTNOTICE, "%d aliases read from %s", g_slist_length(buddies), file_expanded);
+	g_free(file_expanded);
+}
+
+void icq_reread_buddy_file(void)
+{
+   destroy_buddy_list();
+   read_buddy_file();
+}
+
+
+void icq_savebuddy(FILE *stream, const char *uin)
+{
+  fprintf(stream, "%s %s\n", uin, buddy_getalias(uin));
+  printtext(NULL, NULL, MSGLEVEL_CLIENTNOTICE, " %s %s ",uin, buddy_getalias(uin));
+}
+
+void icq_save_buddy_file(void)
+{
+	FILE *stream;
+	const char *file = settings_get_str("buddy_file");
+	//const char *file = "~/.irssi/icq_config";
+	char *file_expanded;
+
+	if (!file || !*file) return;
+	file_expanded = convert_home(file);
+	stream = fopen(file_expanded, "w");
+	if (!stream) return;
+    buddy_forall((GFunc)icq_savebuddy,stream);
+    if (stream)	
+    {
+	  fclose(stream);
+	  printtext(NULL, NULL, MSGLEVEL_CLIENTNOTICE, "%d aliases saved to %s", g_slist_length(buddies), file_expanded);
+	}
 	g_free(file_expanded);
 }
 
@@ -173,23 +224,46 @@ char *read_conf_option(const char *opt)
 	return NULL;
 }
 
+// Status constants
+// Statuses must be checked in the following order:
+//  DND, Occupied, NA, Away, Online
+const unsigned short ICQ_STATUS_OFFLINE            = 0xFFFF;
+const unsigned short ICQ_STATUS_ONLINE             = 0x0000;
+const unsigned short ICQ_STATUS_AWAY               = 0x0001;
+const unsigned short ICQ_STATUS_DND                = 0x0002;
+const unsigned short ICQ_STATUS_NA                 = 0x0004;
+const unsigned short ICQ_STATUS_OCCUPIED           = 0x0010;
+const unsigned short ICQ_STATUS_FREEFORCHAT        = 0x0020;
 const char *modestring(int status)
 {
 	static char unknown[30];
+	static char allmode[60];
+	char *mode;
+	int lowerstat=status&0XFF;
 
-	switch (status) {
-		case OFFLINE: return "offline";
-		case 0: return "online";
-		case 1: return "away";
-		case 4: return "N/A-licq";
-		case 5: return "N/A";
-		case 17: return "occupied";
-		case 19: return "do not disturb";
-		case 32: return "free for chat";
-		default:
-			snprintf(unknown, sizeof unknown, "(%d)", status);
-			return unknown;
+	switch (lowerstat) 
+	  {
+	  case 219:
+	  case OFFLINE: mode="offline"; break;
+	  case 0: mode="online"; break;
+	  case 1: mode="away"; break;
+	  case 2: mode="do not disturb"; break;
+	  case 4: mode="N/A-licq"; break;
+	  case 5: mode="N/A"; break;
+	  case 17: mode="occupied"; break;
+	  case 19: mode="do not disturb"; break;
+	  case 32: mode="free for chat"; break;
+	  default:
+		snprintf(unknown, sizeof unknown, "damn.(%d)", lowerstat);
+		mode=unknown;
+		break;
 	}
+	if (status & 0x100) /* stealth-flag */
+	  {
+		snprintf(allmode, sizeof allmode, "%s Invisible", mode);
+		return allmode;
+	  }
+	return mode;
 }
 
 const char *away_modes[] =
@@ -206,3 +280,4 @@ int parse_away_mode(const char *status)
 	if (*endp) return -1;
 	return code;
 }
+
