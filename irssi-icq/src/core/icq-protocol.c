@@ -665,6 +665,15 @@ static void icq_send_login(ICQ_SERVER_REC *sock, const char *uin, const char *pa
 	xwrite(sock, buf, end - buf);
 }
 
+
+
+void icq_check_buddies(ICQ_SERVER_REC *sock)
+{
+  //icq_check_buddies
+  //ICQ_SERVER_REC * sock;
+  buddy_forall((GFunc)icq_add_buddy, sock);
+}
+
 void icq_login(ICQ_SERVER_REC *sock) {
 	const char *uin, *passwd;
 	ICQ_SERVER_CONNECT_REC *conn;
