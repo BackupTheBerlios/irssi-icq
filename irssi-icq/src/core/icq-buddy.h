@@ -13,3 +13,6 @@ int buddy_setip(const char *uin, guint32 mode);
 const char *modestring(int status);
 extern const char *away_modes[];
 int parse_away_mode(const char *status);
+void icq_save_buddy_file(void);
+void icq_reread_buddy_file(void);
+
