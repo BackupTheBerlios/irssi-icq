@@ -24,6 +24,7 @@
 #include "icq-buddy.h"
 #include "fe-common/core/printtext.h"
 #include "levels.h"
+#include "signals.h"
 
 static void cmd_addbuddy(const char *data, ICQ_SERVER_REC * server)
 {
