@@ -61,3 +61,12 @@ Among things left to do is:
  * Clean up code :)
 
 Chistian Häggström, 4 June 2002, Email me: chm@c00.info
+
+New Features:
+~~~~~~~~~~~~~
+* save buddy list. Be careful, its only a nick uin list, so don't overwrite your old one. uses /save command of irssi.
+* Ignore cases in opening queries
+* don't print Newline-characters anymore.
+
+Wilfried Goesgens, Mit Aug  6 16:03:04 CEST 2003
+Contact me in #irssi in ircnet, nick dothebart
