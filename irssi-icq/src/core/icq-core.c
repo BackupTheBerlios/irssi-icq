@@ -87,13 +87,14 @@ void icq_core_init(void)
 	chat_protocol_register(rec);
 	g_free(rec);
 
+	read_buddy_file();
+
 	icq_servers_init();
 	icq_servers_reconnect_init();
 	icq_protocol_init();
 	icq_commands_init();
 	icq_queries_init();
 	icq_session_init();
-	read_buddy_file();
 
 	module_register("icq", "core");
 }
