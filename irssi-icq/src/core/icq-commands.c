@@ -66,12 +66,19 @@ void icq_commands_init(void)
 {
 	command_bind_icq("addbuddy", NULL, (SIGNAL_FUNC) cmd_addbuddy);
 	command_bind_icq("away", NULL, (SIGNAL_FUNC) cmd_away);
-
+    command_bind_icq("save", NULL, (SIGNAL_FUNC) icq_save_buddy_file);
+	signal_add("setup saved", (SIGNAL_FUNC)icq_save_buddy_file);
+	signal_add("setup reread",(SIGNAL_FUNC)icq_reread_buddy_file);
+	/*    command_bind_icq("connect", NULL, (SIGNAL_FUNC) icq_check_buddies);*/
 	command_set_options("connect", "+icqnet");
 }
 
 void icq_commands_deinit(void)
 {
-	command_unbind("addbuddy", (SIGNAL_FUNC) cmd_addbuddy);
-	command_unbind("away", (SIGNAL_FUNC) cmd_away);
+  signal_remove("setup saved", (SIGNAL_FUNC)icq_save_buddy_file);
+  signal_remove("setup reread",(SIGNAL_FUNC)icq_reread_buddy_file);
+  //    command_unbind("save", (SIGNAL_FUNC) icq_save_buddy_file);
+  /*    command_unbind("connect", (SIGNAL_FUNC) icq_check_buddies);*/
+  command_unbind("addbuddy", (SIGNAL_FUNC) cmd_addbuddy);
+  command_unbind("away", (SIGNAL_FUNC) cmd_away);
 }
